@@ -1,28 +1,44 @@
 import type { Metadata } from 'next';
-
 import Prose from 'components/prose';
-import { getPage } from 'lib/shopify';
 import { notFound } from 'next/navigation';
 
-export async function generateMetadata({
-  params
-}: {
-  params: { page: string };
-}): Promise<Metadata> {
-  const page = await getPage(params.page);
+// Mock data and functions
+const mockPage = {
+  title: 'Mock Page Title',
+  body: '<p>This is a mock page body content.</p>',
+  bodySummary: 'Mock page summary.',
+  seo: {
+    title: 'Mock Page SEO Title',
+    description: 'Mock Page SEO Description'
+  },
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-07-29T00:00:00Z'
+};
 
-  if (!page) return notFound();
+const getPage = async (page: string) => {
+  return page === 'mock-page' ? mockPage : null;
+};
 
-  return {
-    title: page.seo?.title || page.title,
-    description: page.seo?.description || page.bodySummary,
-    openGraph: {
-      publishedTime: page.createdAt,
-      modifiedTime: page.updatedAt,
-      type: 'article'
-    }
-  };
-}
+// Uncomment and use this function if needed for metadata generation
+// export async function generateMetadata({
+//   params
+// }: {
+//   params: { page: string };
+// }): Promise<Metadata> {
+//   const page = await getPage(params.page);
+
+//   if (!page) return notFound();
+
+//   return {
+//     title: page.seo?.title || page.title,
+//     description: page.seo?.description || page.bodySummary,
+//     openGraph: {
+//       publishedTime: page.createdAt,
+//       modifiedTime: page.updatedAt,
+//       type: 'article'
+//     }
+//   };
+// }
 
 export default async function Page({ params }: { params: { page: string } }) {
   const page = await getPage(params.page);

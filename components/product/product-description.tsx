@@ -1,8 +1,40 @@
 import { AddToCart } from 'components/cart/add-to-cart';
 import Price from 'components/price';
 import Prose from 'components/prose';
-import { Product } from 'lib/shopify/types';
 import { VariantSelector } from './variant-selector';
+
+export interface Product {
+  title: string;
+  priceRange: {
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  options: Array<{id:string, name: string; values: string[] }>;
+  variants: Array<{ id: string; title: string; price: string; availableForSale: boolean; selectedOptions: Array<{ name: string; value: string }> }>;
+  descriptionHtml?: string;
+}
+
+const mockProduct: Product = {
+  title: "Mock Product",
+  priceRange: {
+    maxVariantPrice: {
+      amount: "99.99",
+      currencyCode: "USD",
+    },
+  },
+  options: [
+    { id: "1", name: "Size", values: ["S", "M", "L", "XL"] },
+    { id: "2", name: "Color", values: ["Red", "Green", "Blue"] },
+  ],
+  variants: [
+    { id: "1", title: "Small - Red", price: "99.99", availableForSale: true, selectedOptions: [{ name: "Size", value: "S" }, { name: "Color", value: "Red" }] },
+    { id: "2", title: "Medium - Green", price: "99.99", availableForSale: true, selectedOptions: [{ name: "Size", value: "M" }, { name: "Color", value: "Green" }] },
+    { id: "3", title: "Large - Blue", price: "99.99", availableForSale: true, selectedOptions: [{ name: "Size", value: "L" }, { name: "Color", value: "Blue" }] },
+  ],
+  descriptionHtml: "<p>This is a mock product description.</p>",
+};
 
 export function ProductDescription({ product }: { product: Product }) {
   return (
@@ -23,7 +55,9 @@ export function ProductDescription({ product }: { product: Product }) {
           html={product.descriptionHtml}
         />
       ) : null}
-      <AddToCart product={product} />
+      <AddToCart 
+      // product={product}
+       />
     </>
   );
 }

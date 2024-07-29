@@ -1,10 +1,62 @@
-import { getCollection, getCollectionProducts } from 'lib/shopify';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import Grid from 'components/grid';
 import ProductGridItems from 'components/layout/product-grid-items';
-import { defaultSort, sorting } from 'lib/constants';
+import { sorting, defaultSort } from 'lib/constants';
+
+// Mock data and functions
+const mockCollection = {
+  title: 'Mock Collection',
+  seo: {
+    title: 'Mock Collection SEO Title',
+    description: 'Mock Collection SEO Description'
+  },
+  description: 'This is a mock collection description.'
+};
+
+const mockProducts = [
+  {
+    handle: 'mock-product-1',
+    title: 'Mock Product 1',
+    priceRange: {
+      maxVariantPrice: { amount: '29.99', currencyCode: 'USD' }
+    },
+    featuredImage: { url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg', altText: 'Mock Product 1' }
+  },
+  {
+    handle: 'mock-product-2',
+    title: 'Mock Product 2',
+    priceRange: {
+      maxVariantPrice: { amount: '39.99', currencyCode: 'USD' }
+    },
+    featuredImage: { url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg', altText: 'Mock Product 2' }
+  },
+  {
+    handle: 'mock-product-3',
+    title: 'Mock Product 3',
+    priceRange: {
+      maxVariantPrice: { amount: '49.99', currencyCode: 'USD' }
+    },
+    featuredImage: { url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg', altText: 'Mock Product 3' }
+  }
+];
+
+const getCollection = async (collection: string) => {
+  return collection === 'mock-collection' ? mockCollection : null;
+};
+
+const getCollectionProducts = async ({
+  collection,
+  sortKey,
+  reverse
+}: {
+  collection: string;
+  sortKey?: string;
+  reverse?: boolean;
+}) => {
+  return collection === 'mock-collection' ? mockProducts : [];
+};
 
 export async function generateMetadata({
   params
@@ -39,7 +91,7 @@ export default async function CategoryPage({
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (
         <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <ProductGridItems products={products} />
+          <ProductGridItems mockProducts={products} />
         </Grid>
       )}
     </section>

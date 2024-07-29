@@ -1,11 +1,26 @@
 'use client';
 
 import clsx from 'clsx';
-import type { SortFilterItem } from 'lib/constants';
-import { createUrl } from 'lib/utils';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import type { ListItem, PathFilterItem } from '.';
+
+type PathFilterItem = {
+  title: string;
+  path: string;
+};
+
+type SortFilterItem = {
+  title: string;
+  slug: string;
+};
+
+type ListItem = PathFilterItem | SortFilterItem;
+
+function createUrl(path: string, params: URLSearchParams): string {
+  const url = new URL(path, window.location.origin);
+  url.search = params.toString();
+  return url.toString();
+}
 
 function PathFilterItem({ item }: { item: PathFilterItem }) {
   const pathname = usePathname();
@@ -65,3 +80,18 @@ function SortFilterItem({ item }: { item: SortFilterItem }) {
 export function FilterItem({ item }: { item: ListItem }) {
   return 'path' in item ? <PathFilterItem item={item} /> : <SortFilterItem item={item} />;
 }
+
+// Mock data for testing
+const mockPathFilterItem: PathFilterItem = {
+  title: 'Home',
+  path: '/'
+};
+
+const mockSortFilterItem: SortFilterItem = {
+  title: 'Price: Low to High',
+  slug: 'price-asc'
+};
+
+// Render components with mock data for testing
+<FilterItem item={mockPathFilterItem} />;
+<FilterItem item={mockSortFilterItem} />;

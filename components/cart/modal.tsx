@@ -4,14 +4,13 @@ import { Dialog, Transition } from '@headlessui/react';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import LoadingDots from 'components/loading-dots';
 import Price from 'components/price';
-import { DEFAULT_OPTION } from 'lib/constants';
-import { createUrl } from 'lib/utils';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { createCartAndSetCookie, redirectToCheckout } from './actions';
-import { useCart } from './cart-context';
+// import { createCartAndSetCookie, redirectToCheckout } from './actions';
+// import { useCart } from './cart-context';
 import CloseCart from './close-cart';
 import { DeleteItemButton } from './delete-item-button';
 import { EditItemQuantityButton } from './edit-item-quantity-button';
@@ -22,35 +21,35 @@ type MerchandiseSearchParams = {
 };
 
 export default function CartModal() {
-  const { cart, updateCartItem } = useCart();
+  // const { cart, updateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
-  const quantityRef = useRef(cart?.totalQuantity);
+  // const quantityRef = useRef(cart?.totalQuantity);
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  useEffect(() => {
-    if (!cart) {
-      createCartAndSetCookie();
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //   if (!cart) {
+  //     createCartAndSetCookie();
+  //   }
+  // }, [cart]);
 
-  useEffect(() => {
-    if (
-      cart?.totalQuantity &&
-      cart?.totalQuantity !== quantityRef.current &&
-      cart?.totalQuantity > 0
-    ) {
-      if (!isOpen) {
-        setIsOpen(true);
-      }
-      quantityRef.current = cart?.totalQuantity;
-    }
-  }, [isOpen, cart?.totalQuantity, quantityRef]);
+  // useEffect(() => {
+  //   if (
+  //     cart?.totalQuantity &&
+  //     cart?.totalQuantity !== quantityRef.current &&
+  //     cart?.totalQuantity > 0
+  //   ) {
+  //     if (!isOpen) {
+  //       setIsOpen(true);
+  //     }
+  //     quantityRef.current = cart?.totalQuantity;
+  //   }
+  // }, [isOpen, cart?.totalQuantity, quantityRef]);
 
   return (
     <>
       <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
+        <OpenCart quantity={6} />
       </button>
       <Transition show={isOpen}>
         <Dialog onClose={closeCart} className="relative z-50">
@@ -82,15 +81,16 @@ export default function CartModal() {
                 </button>
               </div>
 
-              {!cart || cart.lines.length === 0 ? (
+              {/* {!cart || cart.lines.length === 0 ? ( */}
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">Your cart is empty.</p>
                 </div>
-              ) : (
+              {/* ) : ( */}
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="flex-grow overflow-auto py-4">
-                    {cart.lines
+                    <li>I removed a lot here</li>
+                    {/* {cart.lines
                       .sort((a, b) =>
                         a.merchandise.product.title.localeCompare(b.merchandise.product.title)
                       )
@@ -172,15 +172,15 @@ export default function CartModal() {
                             </div>
                           </li>
                         );
-                      })}
+                      })} */}
                   </ul>
                   <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
                       <p>Taxes</p>
                       <Price
                         className="text-right text-base text-black dark:text-white"
-                        amount={cart.cost.totalTaxAmount.amount}
-                        currencyCode={cart.cost.totalTaxAmount.currencyCode}
+                        amount='10'
+                        currencyCode='dzd'
                       />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
@@ -191,16 +191,18 @@ export default function CartModal() {
                       <p>Total</p>
                       <Price
                         className="text-right text-base text-black dark:text-white"
-                        amount={cart.cost.totalAmount.amount}
-                        currencyCode={cart.cost.totalAmount.currencyCode}
+                        amount='10'
+                        currencyCode='dzd'
                       />
                     </div>
                   </div>
-                  <form action={redirectToCheckout}>
+                  <form 
+                  // action={redirectToCheckout}
+                  >
                     <CheckoutButton />
                   </form>
                 </div>
-              )}
+              {/* )} */}
             </Dialog.Panel>
           </Transition.Child>
         </Dialog>

@@ -2,9 +2,29 @@
 
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { updateItemQuantity } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
-import { useFormState } from 'react-dom';
+import { useState } from 'react';
+
+// Mock implementation of updateItemQuantity
+const updateItemQuantity = async (payload: { merchandiseId: string; quantity: number }) => {
+  return { success: true };
+};
+
+// Mock implementation of useFormState
+const useFormState = (action: Function, initialState: any) => {
+  const [state, setState] = useState(initialState);
+  const formAction = async (payload: any) => {
+    const result = await action(payload);
+    setState(result.success ? 'Success' : 'Failed');
+  };
+  return [state, formAction];
+};
+
+type CartItem = {
+  merchandise: {
+    id: string;
+  };
+  quantity: number;
+};
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   return (
@@ -34,7 +54,7 @@ export function EditItemQuantityButton({
 }: {
   item: CartItem;
   type: 'plus' | 'minus';
-  optimisticUpdate: any;
+  optimisticUpdate: (id: string, type: 'plus' | 'minus') => void;
 }) {
   const [message, formAction] = useFormState(updateItemQuantity, null);
   const payload = {
@@ -57,3 +77,23 @@ export function EditItemQuantityButton({
     </form>
   );
 }
+
+// Mock data for testing
+const mockCartItem: CartItem = {
+  merchandise: {
+    id: 'mock-merchandise-id'
+  },
+  quantity: 1
+};
+
+// Mock function for optimisticUpdate
+const mockOptimisticUpdate = (id: string, type: 'plus' | 'minus') => {
+  console.log(`Optimistically updating item ${id} with action ${type}`);
+};
+
+// Render component with mock data for testing
+<EditItemQuantityButton
+  item={mockCartItem}
+  type="plus"
+  optimisticUpdate={mockOptimisticUpdate}
+/>;

@@ -2,13 +2,65 @@
 
 import clsx from 'clsx';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
-import { ProductOption, ProductVariant } from 'lib/shopify/types';
+
+type ProductOption = {
+  id: string;
+  name: string;
+  values: string[];
+};
+
+type ProductVariant = {
+  id: string;
+  availableForSale: boolean;
+  selectedOptions: { name: string; value: string }[];
+};
 
 type Combination = {
   id: string;
   availableForSale: boolean;
   [key: string]: string | boolean;
 };
+
+// Mock data
+const mockOptions: ProductOption[] = [
+  {
+    id: '1',
+    name: 'Size',
+    values: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '2',
+    name: 'Color',
+    values: ['Red', 'Green', 'Blue']
+  }
+];
+
+const mockVariants: ProductVariant[] = [
+  {
+    id: '1',
+    availableForSale: true,
+    selectedOptions: [
+      { name: 'Size', value: 'S' },
+      { name: 'Color', value: 'Red' }
+    ]
+  },
+  {
+    id: '2',
+    availableForSale: true,
+    selectedOptions: [
+      { name: 'Size', value: 'M' },
+      { name: 'Color', value: 'Green' }
+    ]
+  },
+  {
+    id: '3',
+    availableForSale: false,
+    selectedOptions: [
+      { name: 'Size', value: 'L' },
+      { name: 'Color', value: 'Blue' }
+    ]
+  }
+];
 
 export function VariantSelector({
   options,

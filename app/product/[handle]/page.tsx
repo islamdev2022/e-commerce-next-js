@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { GridTileImage } from 'components/grid/tile';
 import Footer from 'components/layout/footer';
@@ -6,42 +6,18 @@ import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { ProductDescription } from 'components/product/product-description';
+import { mockProducts } from 'components/FakeProduct';
 
-// Mock data and functions
 const HIDDEN_PRODUCT_TAG = 'hidden';
-const mockProduct = {
-  id: '1',
-  handle: 'mock-product',
-  title: 'Mock Product',
-  description: 'This is a mock product description.',
-  featuredImage: {
-    url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg',
-    width: 600,
-    height: 400,
-    altText: 'Mock Product Image'
-  },
-  images: [
-    { url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg', altText: 'Image 1' },
-    { url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg', altText: 'Image 2' }
-  ],
-  tags: [],
-  availableForSale: true,
-  priceRange: {
-    minVariantPrice: { amount: '10.00', currencyCode: 'USD' },
-    maxVariantPrice: { amount: '20.00', currencyCode: 'USD' }
-  },
-  seo: {
-    title: 'Mock Product SEO Title',
-    description: 'Mock Product SEO Description'
-  }
-};
 
+// Function to fetch the product based on the handle
 const getProduct = async (handle: string) => {
-  return handle === 'mock-product' ? mockProduct : null;
+  return mockProducts.find((product) => product.handle === handle) || null;
 };
 
 const getProductRecommendations = async (id: string) => {
-  return [mockProduct, mockProduct, mockProduct];
+  return [mockProducts[0], mockProducts[1], mockProducts[2]];
 };
 
 export default async function ProductPage({ params }: { params: { handle: string } }) {
@@ -62,7 +38,7 @@ export default async function ProductPage({ params }: { params: { handle: string
               <Gallery
                 images={product.images.slice(0, 5).map((image) => ({
                   src: image.url,
-                  altText: image.altText
+                  altText: image.altText,
                 }))}
               />
             </Suspense>
@@ -70,8 +46,7 @@ export default async function ProductPage({ params }: { params: { handle: string
 
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
-              <p className="mb-8 text-5xl font-bold">{product.title}</p>
-              <p className="text-lg">{product.description}</p>
+              {product && <ProductDescription mockProduct={product} />}
             </Suspense>
           </div>
         </div>
@@ -93,22 +68,22 @@ async function RelatedProducts({ id }: { id: string }) {
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
           <li
-            key={product.handle}
+            key={product?.handle}
             className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
           >
             <Link
               className="relative h-full w-full"
-              href={`/product/${product.handle}`}
+              href={`/product/${product?.handle}`}
               prefetch={true}
             >
               <GridTileImage
-                alt={product.title}
+                alt={product?.title || ''}
                 label={{
-                  title: product.title,
-                  amount: product.priceRange.maxVariantPrice.amount,
-                  currencyCode: product.priceRange.maxVariantPrice.currencyCode
+                  title: product?.title ?? '',
+                  amount: product?.priceRange.maxVariantPrice.amount ?? '',
+                  currencyCode: product?.priceRange.maxVariantPrice.currencyCode ?? '',
                 }}
-                src={product.featuredImage?.url}
+                src={product?.featuredImage?.url ?? ""}
                 fill
                 sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
               />

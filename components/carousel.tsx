@@ -1,63 +1,7 @@
 import Link from 'next/link';
 import { GridTileImage } from './grid/tile';
 
-type Product = {
-  handle: string;
-  title: string;
-  priceRange: {
-    maxVariantPrice: {
-      amount: string;
-      currencyCode: string;
-    };
-  };
-  featuredImage?: {
-    url: string;
-  };
-};
-
-// Mock data
-const mockProducts: Product[] = [
-  {
-    handle: 'product-1',
-    title: 'Mock Product 1',
-    priceRange: {
-      maxVariantPrice: {
-        amount: '29.99',
-        currencyCode: 'USD'
-      }
-    },
-    featuredImage: {
-      url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg'
-    }
-  },
-  {
-    handle: 'product-2',
-    title: 'Mock Product 2',
-    priceRange: {
-      maxVariantPrice: {
-        amount: '49.99',
-        currencyCode: 'USD'
-      }
-    },
-    featuredImage: {
-      url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg'
-    }
-  },
-  {
-    handle: 'product-3',
-    title: 'Mock Product 3',
-    priceRange: {
-      maxVariantPrice: {
-        amount: '39.99',
-        currencyCode: 'USD'
-      }
-    },
-    featuredImage: {
-      url: '/assets/_cae479a4-40f9-4d38-8130-9dba498e7467.jpg'
-    }
-  }
-];
-
+import { mockProducts } from './FakeProduct';
 export async function Carousel() {
   // Collections that start with `hidden-*` are hidden from the search page.
   const products = [...mockProducts, ...mockProducts, ...mockProducts]; // Duplicating products for the carousel

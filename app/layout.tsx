@@ -6,11 +6,12 @@ import { GeistSans } from 'geist/font/sans';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
+import { CartProvider } from 'components/cart/cart-context';
 import './globals.css';
 
 // Mock implementation of getCart
 const getCart = async (cartId?: string) => {
-  return { id: cartId || 'mock-cart-id', items: [] };
+  return { id: cartId || 'mock-cart-id', items: [], checkoutUrl: '', totalQuantity: 0, lines: [], cost: { subtotalAmount: { amount: '0', currencyCode: 'USD' }, totalAmount: { amount: '0', currencyCode: 'USD' }, totalTaxAmount: { amount: '0', currencyCode: 'USD' } }, taxAmount: { amount: '0', currencyCode: 'USD' }, totalAmount: { amount: '0', currencyCode: 'USD' } };
 };
 
 // Mock implementation of ensureStartsWith
@@ -56,14 +57,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" className={GeistSans.variable}>
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
-        {/* <CartProvider cartPromise={cart}> */}
+        <CartProvider cartPromise={cart}>
           <Navbar />
           <main>
             {children}
             <Toaster closeButton />
             <WelcomeToast />
           </main>
-        {/* </CartProvider> */}
+        </CartProvider>
       </body>
     </html>
   );

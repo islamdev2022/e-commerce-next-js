@@ -1,5 +1,6 @@
 'use client';
 
+import { ProductVariant } from 'components/FakeProduct';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { createContext, useContext, useMemo, useOptimistic } from 'react';
 
@@ -10,6 +11,9 @@ type ProductState = {
 };
 
 type ProductContextType = {
+  availableForSale: boolean;
+
+  variants: ProductVariant[];
   state: ProductState;
   updateOption: (name: string, value: string) => ProductState;
   updateImage: (index: string) => ProductState;
@@ -57,7 +61,17 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     [state]
   );
 
-  return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;
+  return (
+    <ProductContext.Provider
+      value={{
+        availableForSale: false,
+        variants: [],
+        ...value
+      }}
+    >
+      {children}
+    </ProductContext.Provider>
+  );
 }
 
 export function useProduct() {
